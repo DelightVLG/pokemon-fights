@@ -1,68 +1,78 @@
-const kickBtn = document.querySelector('#btn-kick');
-const ultimateKickBtn = document.querySelector('#btn-ultimate');
+function getElById(id) {
+  return document.querySelector(`#${id}`);
+}
+
+const kickBtn = getElById('btn-kick');
+const ultimateKickBtn = getElById('btn-ultimate');
+
 
 const character = {
   name: 'Pikachu',
   defaultHp: 100,
   damageHp: 100,
-  elHpCount: document.querySelector('#health-character'),
-  elHpProgressBar: document.querySelector('#progressbar-character')
+  elHpCount: getElById('health-character'),
+  elHpProgressBar: getElById('progressbar-character'),
+  changeHp: changeHp,
+  renderHp: renderHp,
+  renderLife: renderLife,
+  renderLifeProgressBar: renderLifeProgressBar,
 }
 
 const enemy = {
   name: 'Charmander',
   defaultHp: 100,
   damageHp: 100,
-  elHpCount: document.querySelector('#health-enemy'),
-  elHpProgressBar: document.querySelector('#progressbar-enemy'),
+  elHpCount: getElById('health-enemy'),
+  elHpProgressBar: getElById('progressbar-enemy'),
+  changeHp: changeHp,
+  renderHp: renderHp,
+  renderLife: renderLife,
+  renderLifeProgressBar: renderLifeProgressBar,
 }
 
-const renderLife = (person) => {
-  person.elHpCount.innerText = `${person.damageHp} / ${person.defaultHp}`;
+function renderLife() {
+  this.elHpCount.innerText = `${this.damageHp} / ${this.defaultHp}`;
 }
 
-const renderLifeProgressBar = (person) => {
-  person.elHpProgressBar.style.width = `${person.damageHp}%`;
+function renderLifeProgressBar() {
+  this.elHpProgressBar.style.width = `${this.damageHp}%`;
 }
 
-const renderHp = (person) => {
-  renderLife(person);
-  renderLifeProgressBar(person);
+function renderHp() {
+  this.renderLife();
+  this.renderLifeProgressBar();
 }
 
-const changeHp = (value, person) => {
-  if (person.damageHp < value) {
-    person.damageHp = 0;
-    alert(`Покемон ${person.name} проиграл...`)
+function changeHp(value) {
+  this.damageHp -= value;
+
+  if (this.damageHp <= 0) {
+    this.damageHp = 0;
+    alert(`Покемон ${this.name} проиграл...`)
     kickBtn.disabled = true;
-  } else {
-    person.damageHp -= value;
   }
 
-  renderHp(person);
+  this.renderHp();
 }
 
-const randomDmg = (num) => {
+function randomDmg(num) {
   return Math.ceil(Math.random() * num);
 }
 
-const calculateDmg = (value) => {
-  changeHp(randomDmg(value), character);
-  changeHp(randomDmg(value), enemy);
-}
-
 kickBtn.addEventListener('click', () => {
-  calculateDmg(20)
+  character.changeHp(randomDmg(20));
+  enemy.changeHp(randomDmg(20));
 });
 
 ultimateKickBtn.addEventListener('click', () => {
-  calculateDmg(70)
+  character.changeHp(randomDmg(70));
+  enemy.changeHp(randomDmg(70));
 })
 
-const init = () => {
+function init() {
   console.log('START');
-  renderHp(character);
-  renderHp(enemy);
+  character.renderHp();
+  enemy.renderHp();
 }
 
 init();
