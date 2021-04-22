@@ -5,7 +5,6 @@ function getElById(id) {
 const kickBtn = getElById('btn-kick');
 const ultimateKickBtn = getElById('btn-ultimate');
 
-
 const character = {
   name: 'Pikachu',
   defaultHp: 100,
@@ -35,7 +34,7 @@ function renderLife() {
 }
 
 function renderLifeProgressBar() {
-  this.elHpProgressBar.style.width = `${this.damageHp}%`;
+  this.elHpProgressBar.style.width = `${this.damageHp * 100 / this.defaultHp}%`;
 }
 
 function renderHp() {
@@ -65,6 +64,8 @@ function randomNum(num) {
 }
 
 function generateLog(firstPerson, secondPerson, damage, currentHp, maxHp) {
+  const battleLog = getElById('logs');
+  const p = document.createElement('p');
   const logs = [
     `${firstPerson} вспомнил что-то важное, но неожиданно ${secondPerson}, не помня себя от испуга, ударил в предплечье врага. -${damage} [${currentHp}/${maxHp}]`,
     `${firstPerson} поперхнулся, и за это ${secondPerson} с испугу приложил прямой удар коленом в лоб врага. -${damage} [${currentHp}/${maxHp}]`,
@@ -77,7 +78,9 @@ function generateLog(firstPerson, secondPerson, damage, currentHp, maxHp) {
     `${firstPerson} расстроился, как вдруг, неожиданно ${secondPerson} случайно влепил стопой в живот соперника. -${damage} [${currentHp}/${maxHp}]`,
     `${firstPerson} пытался что-то сказать, но вдруг, неожиданно ${secondPerson} со скуки, разбил бровь сопернику -${damage} [${currentHp}/${maxHp}]`,
   ];
-  return logs[randomNum(logs.length - 1)];
+
+  p.innerText = logs[randomNum(logs.length - 1)];
+  battleLog.prepend(p);
 }
 
 kickBtn.addEventListener('click', () => {

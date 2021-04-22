@@ -472,3 +472,8 @@ h1 {
 .action label {
     padding: 6px 0;
 }
+
+.battle-log {
+  max-height: 200px;
+  overflow: hidden;
+}
