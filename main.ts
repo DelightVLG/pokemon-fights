@@ -1,11 +1,23 @@
-function getElById(id) {
+function getElById(id: string) {
   return document.querySelector(`#${id}`);
 }
 
-const kickBtn = getElById('btn-kick');
-const ultimateKickBtn = getElById('btn-ultimate');
+const kickBtn = getElById('btn-kick') as HTMLButtonElement;
+const ultimateKickBtn = getElById('btn-ultimate') as HTMLButtonElement;
 
-const character = {
+interface Unit {
+  name: string,
+  defaultHp: number,
+  damageHp: number,
+  elHpCount: any,
+  elHpProgressBar: any,
+  changeHp: any,
+  renderHp: any,
+  renderLife: any,
+  renderLifeProgressBar: any,
+}
+
+const character: Unit = {
   name: 'Pikachu',
   defaultHp: 100,
   damageHp: 100,
@@ -17,7 +29,7 @@ const character = {
   renderLifeProgressBar: renderLifeProgressBar,
 }
 
-const enemy = {
+const enemy: Unit = {
   name: 'Charmander',
   defaultHp: 100,
   damageHp: 100,
@@ -29,20 +41,20 @@ const enemy = {
   renderLifeProgressBar: renderLifeProgressBar,
 }
 
-function renderLife() {
+function renderLife(this: Unit) {
   this.elHpCount.innerText = `${this.damageHp} / ${this.defaultHp}`;
 }
 
-function renderLifeProgressBar() {
+function renderLifeProgressBar(this: Unit) {
   this.elHpProgressBar.style.width = `${this.damageHp * 100 / this.defaultHp}%`;
 }
 
-function renderHp() {
+function renderHp(this: Unit) {
   this.renderLife();
   this.renderLifeProgressBar();
 }
 
-function changeHp(value) {
+function changeHp(this: Unit, value: number) {
   this.damageHp -= value;
 
   const log = this === enemy
@@ -59,14 +71,14 @@ function changeHp(value) {
   this.renderHp();
 }
 
-function randomNum(num) {
+function randomNum(num: number): number {
   return Math.ceil(Math.random() * num);
 }
 
-function generateLog(firstPerson, secondPerson, damage, currentHp, maxHp) {
-  const battleLog = getElById('logs');
+function generateLog(firstPerson: string, secondPerson: string, damage: number, currentHp: number, maxHp: number) {
+  const battleLog = getElById('logs') as HTMLElement;
   const p = document.createElement('p');
-  const logs = [
+  const logs: string[] = [
     `${firstPerson} вспомнил что-то важное, но неожиданно ${secondPerson}, не помня себя от испуга, ударил в предплечье врага. -${damage} [${currentHp}/${maxHp}]`,
     `${firstPerson} поперхнулся, и за это ${secondPerson} с испугу приложил прямой удар коленом в лоб врага. -${damage} [${currentHp}/${maxHp}]`,
     `${firstPerson} забылся, но в это время наглый ${secondPerson}, приняв волевое решение, неслышно подойдя сзади, ударил. -${damage} [${currentHp}/${maxHp}]`,
